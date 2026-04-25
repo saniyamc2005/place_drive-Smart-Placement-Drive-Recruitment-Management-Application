@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlacementDrive — Admin</title>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .mini-chart { display: flex; align-items: flex-end; gap: 4px; height: 50px; }
+  .mini-bar { flex: 1; background: var(--primary); border-radius: 3px 3px 0 0; opacity: 0.7; transition: opacity 0.2s; }
+  .mini-bar:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"></div>
+      <div>
+        <div class="sidebar-brand-text">PlacementDrive</div>
+        <div class="sidebar-brand-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <button class="nav-item active" id="nav-dashboard"  onclick="showPage('dashboard')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg></span> Dashboard</button>
+      <button class="nav-item" id="nav-students"  onclick="showPage('students')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Students</button>
+      <button class="nav-item" id="nav-companies" onclick="showPage('companies')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="5" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5V4a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Companies</button>
+      <button class="nav-item" id="nav-jobs"      onclick="showPage('jobs')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h6M4 9h4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></span> All Jobs</button>
+      <button class="nav-item" id="nav-applications" onclick="showPage('applications')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 6h10M2 9h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> All Applications</button>
+      <span class="nav-section-label">Account</span>
+      <button class="nav-item" onclick="logout()"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 7h7M9.5 4.5L12 7l-2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 2H3a1 1 0 00-1 1v8a1 1 0 001 1h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Sign Out</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="sidebar-user-avatar">A</div>
+        <div>
+          <div class="user-name" id="sidebar-user-name">Admin</div>
+          <div class="user-role" id="sidebar-user-role">Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Admin Dashboard</div>
+      <div class="topbar-right">
+        <span style="font-size:0.82rem;color:var(--text-muted)" id="topbar-date"></span>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- ═══════════ DASHBOARD ═══════════ -->
+      <div id="page-dashboard">
+        <div class="page-header">
+          <h2>Platform Overview</h2>
+          <p>Real-time data from the database</p>
+        </div>
+        <div class="grid-4" style="margin-bottom:28px">
+          <div class="stat-card"><div class="stat-icon blue"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-students">—</div><div class="stat-label">Total Students</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-companies">—</div><div class="stat-label">Companies</div></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-jobs">—</div><div class="stat-label">Total Jobs</div></div></div>
+          <div class="stat-card"><div class="stat-icon purple" style="background:#ede9fe"></div><div><div class="stat-value" id="stat-apps">—</div><div class="stat-label">Applications</div></div></div>
+        </div>
+        <div class="grid-4" style="margin-bottom:28px">
+          <div class="stat-card"><div class="stat-icon green"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-selected">—</div><div class="stat-label">Students Selected</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber" style="background:#fef3c7">⭐</div><div><div class="stat-value" id="stat-shortlisted">—</div><div class="stat-label">Shortlisted</div></div></div>
+          <div class="stat-card"><div class="stat-icon red" style="background:#fee2e2"></div><div><div class="stat-value" id="stat-rejected">—</div><div class="stat-label">Rejected</div></div></div>
+          <div class="stat-card"><div class="stat-icon blue">⏳</div><div><div class="stat-value" id="stat-pending">—</div><div class="stat-label">Pending Review</div></div></div>
+        </div>
+
+        <div class="grid-2" style="align-items:start">
+          <!-- Application status breakdown -->
+          <div class="card">
+            <div class="section-title mb-2">Application Status Breakdown</div>
+            <div id="status-breakdown"></div>
+          </div>
+          <!-- Recent activity -->
+          <div class="card">
+            <div class="section-header"><div class="section-title">Recent Applications</div><button class="btn btn-ghost btn-sm" onclick="showPage('applications')">View all</button></div>
+            <div id="dash-recent-apps"><div class="page-loading"><div class="spin"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ STUDENTS ═══════════ -->
+      <div id="page-students" class="hidden">
+        <div class="page-header"><h2>All Students</h2><p>View all registered students</p></div>
+        <div class="filter-bar">
+          <div class="search-box" style="flex:1">
+            <span class="search-icon"></span>
+            <input type="text" class="form-control" id="stu-search" placeholder="Search by name, USN, branch..." oninput="filterStudents()"/>
+          </div>
+          <select class="form-control" style="width:160px" id="stu-branch-filter" onchange="filterStudents()">
+            <option value="">All Branches</option>
+          </select>
+        </div>
+        <div class="card card-flat" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>#</th><th>Name</th><th>Email</th><th>USN</th><th>Branch</th><th>CGPA</th><th>Skills</th><th>Resume</th></tr>
+              </thead>
+              <tbody id="students-tbody"><tr><td colspan="8" style="text-align:center;padding:40px"><div class="page-loading"><div class="spin"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ COMPANIES ═══════════ -->
+      <div id="page-companies" class="hidden">
+        <div class="page-header"><h2>All Companies</h2><p>View all registered companies</p></div>
+        <div class="filter-bar">
+          <div class="search-box" style="flex:1">
+            <span class="search-icon"></span>
+            <input type="text" class="form-control" id="comp-search" placeholder="Search by name, industry..." oninput="filterCompanies()"/>
+          </div>
+        </div>
+        <div id="companies-grid" class="grid-3">
+          <div class="page-loading"><div class="spin"></div></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ ALL JOBS ═══════════ -->
+      <div id="page-jobs" class="hidden">
+        <div class="page-header"><h2>All Job Postings</h2><p>View all jobs across all companies</p></div>
+        <div class="filter-bar">
+          <div class="search-box" style="flex:1">
+            <span class="search-icon"></span>
+            <input type="text" class="form-control" id="job-search" placeholder="Search by role, company..." oninput="filterAllJobs()"/>
+          </div>
+          <select class="form-control" style="width:150px" id="job-status-filter" onchange="filterAllJobs()">
+            <option value="">All Status</option>
+            <option>Open</option>
+            <option>Closed</option>
+          </select>
+        </div>
+        <div class="card card-flat" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>#</th><th>Company</th><th>Role</th><th>Package</th><th>Min CGPA</th><th>Openings</th><th>Type</th><th>Deadline</th><th>Status</th></tr>
+              </thead>
+              <tbody id="all-jobs-tbody"><tr><td colspan="9" style="text-align:center;padding:40px"><div class="page-loading"><div class="spin"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ ALL APPLICATIONS ═══════════ -->
+      <div id="page-applications" class="hidden">
+        <div class="page-header"><h2>All Applications</h2><p>View and manage every application in the system</p></div>
+        <div class="filter-bar">
+          <div class="search-box" style="flex:1">
+            <span class="search-icon"></span>
+            <input type="text" class="form-control" id="all-app-search" placeholder="Search by student, company, role..." oninput="filterAllApplications()"/>
+          </div>
+          <select class="form-control" style="width:180px" id="all-app-status" onchange="filterAllApplications()">
+            <option value="">All Statuses</option>
+            <option>Applied</option>
+            <option>Shortlisted</option>
+            <option>Selected</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+        <div class="card card-flat" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>#</th><th>Student</th><th>USN</th><th>Company</th><th>Role</th><th>Package</th><th>CGPA</th><th>Applied On</th><th>Status</th><th>Remarks</th><th>Action</th></tr>
+              </thead>
+              <tbody id="all-apps-tbody"><tr><td colspan="11" style="text-align:center;padding:40px"><div class="page-loading"><div class="spin"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE STATUS MODAL (admin) -->
+<div class="modal-overlay hidden" id="modal-admin-status">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <h3>Update Status</h3>
+      <button class="modal-close" onclick="closeModal('modal-admin-status')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">New Status</label>
+        <select id="admin-new-status" class="form-control">
+          <option>Applied</option><option>Shortlisted</option><option>Selected</option><option>Rejected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Remarks</label>
+        <textarea id="admin-remarks" class="form-control" rows="2" placeholder="Optional note..."></textarea>
+      </div>
+      <input type="hidden" id="admin-update-app-id"/>
+      <button class="btn btn-primary w-full" onclick="adminUpdateStatus()">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/utils.js"></script>
+<script>
+  if (!requireAuth(['admin'])) { /* redirected */ }
+  renderSidebarUser();
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long'});
+
+  let allStudents = [], allCompanies = [], allJobs = [], allApplications = [];
+
+  function showPage(page) {
+    ['dashboard','students','companies','jobs','applications'].forEach(p => {
+      document.getElementById('page-'+p).classList.toggle('hidden', p !== page);
+      document.getElementById('nav-'+p)?.classList.toggle('active', p === page);
+    });
+    const titles = { dashboard:'Admin Dashboard', students:'All Students', companies:'All Companies', jobs:'All Jobs', applications:'All Applications' };
+    document.getElementById('topbar-title').textContent = titles[page];
+    if (page === 'dashboard')    loadDashboard();
+    if (page === 'students')     loadStudents();
+    if (page === 'companies')    loadCompanies();
+    if (page === 'jobs')         loadAllJobs();
+    if (page === 'applications') loadAllApplications();
+  }
+
+  // ── DASHBOARD ────────────────────────────────────────────────────────────────
+  async function loadDashboard() {
+    try {
+      const [stuRes, compRes, jobRes, appRes, statsRes] = await Promise.all([
+        api.get('/students/all'),
+        api.get('/companies/all'),
+        api.get('/jobs/all'),
+        api.get('/applications/all'),
+        api.get('/applications/stats')
+      ]);
+
+      const students     = stuRes || [];
+      const companies    = compRes || [];
+      const jobs         = jobRes || [];
+      const apps         = appRes.applications || [];
+      const stats        = statsRes;
+
+      document.getElementById('stat-students').textContent   = students.length;
+      document.getElementById('stat-companies').textContent  = companies.length;
+      document.getElementById('stat-jobs').textContent       = jobs.length;
+      document.getElementById('stat-apps').textContent       = apps.length;
+      document.getElementById('stat-selected').textContent   = stats.totalSelected   || 0;
+      document.getElementById('stat-shortlisted').textContent= stats.totalShortlisted || 0;
+      document.getElementById('stat-rejected').textContent   = stats.totalRejected   || 0;
+      document.getElementById('stat-pending').textContent    = stats.totalPending    || 0;
+
+      // Status breakdown bars
+      const total = apps.length || 1;
+      const breakdown = [
+        { label: 'Applied',     count: stats.totalPending || 0,     color: '#3b82f6' },
+        { label: 'Shortlisted', count: stats.totalShortlisted || 0, color: '#f59e0b' },
+        { label: 'Selected',    count: stats.totalSelected || 0,    color: '#10b981' },
+        { label: 'Rejected',    count: stats.totalRejected || 0,    color: '#ef4444' },
+      ];
+      document.getElementById('status-breakdown').innerHTML = breakdown.map(b => `
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:5px">
+            <span style="font-weight:500">${b.label}</span>
+            <span style="color:var(--text-muted)">${b.count} (${Math.round(b.count/total*100)}%)</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(b.count/total*100)}%;background:${b.color}"></div></div>
+        </div>`).join('');
+
+      // Recent applications
+      const recentEl = document.getElementById('dash-recent-apps');
+      const recent = apps.slice(-5).reverse();
+      recentEl.innerHTML = recent.length ? recent.map(a => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-light)">
+          <div>
+            <div style="font-weight:600;font-size:0.82rem">${a.student?.user?.name || '—'}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">${a.job?.company?.companyName || '—'} · ${a.job?.role || '—'}</div>
+          </div>
+          ${badgeHtml(a.status)}
+        </div>`).join('') : emptyState('No applications yet');
+
+    } catch(e) { showToast('Failed to load dashboard', 'error'); }
+  }
+
+  // ── STUDENTS ─────────────────────────────────────────────────────────────────
+  async function loadStudents() {
+    try {
+      allStudents = await api.get('/students/all');
+      // Build branch filter options
+      const branches = [...new Set(allStudents.map(s => s.branch).filter(Boolean))];
+      const sel = document.getElementById('stu-branch-filter');
+      sel.innerHTML = '<option value="">All Branches</option>' + branches.map(b => `<option>${b}</option>`).join('');
+      renderStudents(allStudents);
+    } catch(e) { showToast('Failed to load students', 'error'); }
+  }
+
+  function renderStudents(students) {
+    const tbody = document.getElementById('students-tbody');
+    if (!students.length) { tbody.innerHTML = `<tr><td colspan="8">${emptyState('No students found')}</td></tr>`; return; }
+    tbody.innerHTML = students.map((s, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0">${avatarLetter(s.user?.name)}</div>
+            <strong>${s.user?.name || '—'}</strong>
+          </div>
+        </td>
+        <td style="font-size:0.82rem;color:var(--text-muted)">${s.user?.email || '—'}</td>
+        <td>${s.usn || '—'}</td>
+        <td><span class="badge badge-primary">${s.branch || '—'}</span></td>
+        <td><strong>${s.cgpa || '—'}</strong></td>
+        <td style="font-size:0.78rem">${(s.skills || '').split(',').slice(0,3).join(', ') || '—'}</td>
+        <td>${s.resumeLink ? `<a href="${s.resumeLink}" target="_blank" class="btn btn-outline btn-sm"> View</a>` : '—'}</td>
+      </tr>`).join('');
+  }
+
+  function filterStudents() {
+    const q      = document.getElementById('stu-search').value.toLowerCase();
+    const branch = document.getElementById('stu-branch-filter').value;
+    renderStudents(allStudents.filter(s => {
+      const matchQ = !q || s.user?.name?.toLowerCase().includes(q) || s.usn?.toLowerCase().includes(q) || s.branch?.toLowerCase().includes(q);
+      const matchB = !branch || s.branch === branch;
+      return matchQ && matchB;
+    }));
+  }
+
+  // ── COMPANIES ────────────────────────────────────────────────────────────────
+  async function loadCompanies() {
+    try {
+      allCompanies = await api.get('/companies/all');
+      renderCompanies(allCompanies);
+    } catch(e) { showToast('Failed to load companies', 'error'); }
+  }
+
+  function renderCompanies(companies) {
+    const grid = document.getElementById('companies-grid');
+    if (!companies.length) { grid.innerHTML = emptyState('No companies registered'); return; }
+    grid.innerHTML = companies.map(c => `
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+          <div style="width:48px;height:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.2rem;font-weight:800;flex-shrink:0">${avatarLetter(c.companyName)}</div>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;font-size:1rem">${c.companyName}</div>
+            <span class="badge badge-primary" style="margin-top:3px">${c.industry || 'N/A'}</span>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;line-height:1.5">${c.description || 'No description provided.'}</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary)"> ${c.contactEmail || c.user?.email || '—'}</div>
+        ${c.website ? `<div style="font-size:0.78rem;color:var(--primary);margin-top:4px"> <a href="${c.website}" target="_blank">${c.website}</a></div>` : ''}
+      </div>`).join('');
+  }
+
+  function filterCompanies() {
+    const q = document.getElementById('comp-search').value.toLowerCase();
+    renderCompanies(allCompanies.filter(c =>
+      !q || c.companyName?.toLowerCase().includes(q) || c.industry?.toLowerCase().includes(q)
+    ));
+  }
+
+  // ── ALL JOBS ─────────────────────────────────────────────────────────────────
+  async function loadAllJobs() {
+    try {
+      allJobs = await api.get('/jobs/all');
+      renderAllJobs(allJobs);
+    } catch(e) { showToast('Failed to load jobs', 'error'); }
+  }
+
+  function renderAllJobs(jobs) {
+    const tbody = document.getElementById('all-jobs-tbody');
+    if (!jobs.length) { tbody.innerHTML = `<tr><td colspan="9">${emptyState('No jobs found')}</td></tr>`; return; }
+    tbody.innerHTML = jobs.map((j, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${j.company?.companyName || '—'}</strong></td>
+        <td>${j.role}</td>
+        <td>${packageLabel(j.packageAmount)}</td>
+        <td>${j.minCgpa}</td>
+        <td>${j.openings || '—'}</td>
+        <td>${j.jobType || '—'}</td>
+        <td>${formatDate(j.deadline)}</td>
+        <td>${badgeHtml(j.status)}</td>
+      </tr>`).join('');
+  }
+
+  function filterAllJobs() {
+    const q      = document.getElementById('job-search').value.toLowerCase();
+    const status = document.getElementById('job-status-filter').value;
+    renderAllJobs(allJobs.filter(j => {
+      const matchQ = !q || j.role?.toLowerCase().includes(q) || j.company?.companyName?.toLowerCase().includes(q);
+      const matchS = !status || j.status === status;
+      return matchQ && matchS;
+    }));
+  }
+
+  // ── ALL APPLICATIONS ──────────────────────────────────────────────────────────
+  async function loadAllApplications() {
+    try {
+      const res = await api.get('/applications/all');
+      allApplications = res.applications || [];
+      renderAllApplications(allApplications);
+    } catch(e) { showToast('Failed to load applications', 'error'); }
+  }
+
+  function renderAllApplications(apps) {
+    const tbody = document.getElementById('all-apps-tbody');
+    if (!apps.length) { tbody.innerHTML = `<tr><td colspan="11">${emptyState('No applications found')}</td></tr>`; return; }
+    tbody.innerHTML = apps.map((a, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${a.student?.user?.name || '—'}</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">${a.student?.user?.email || ''}</span></td>
+        <td>${a.student?.usn || '—'}</td>
+        <td>${a.job?.company?.companyName || '—'}</td>
+        <td>${a.job?.role || '—'}</td>
+        <td>${packageLabel(a.job?.packageAmount)}</td>
+        <td><strong>${a.student?.cgpa || '—'}</strong></td>
+        <td>${formatDate(a.appliedDate)}</td>
+        <td>${badgeHtml(a.status)}</td>
+        <td style="font-size:0.78rem;color:var(--text-muted);max-width:150px">${a.remarks || '—'}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="openAdminStatusModal(${a.id}, '${a.status}')">Update</button></td>
+      </tr>`).join('');
+  }
+
+  function filterAllApplications() {
+    const q      = document.getElementById('all-app-search').value.toLowerCase();
+    const status = document.getElementById('all-app-status').value;
+    renderAllApplications(allApplications.filter(a => {
+      const matchQ = !q || a.student?.user?.name?.toLowerCase().includes(q)
+                       || a.job?.company?.companyName?.toLowerCase().includes(q)
+                       || a.job?.role?.toLowerCase().includes(q)
+                       || a.student?.usn?.toLowerCase().includes(q);
+      const matchS = !status || a.status === status;
+      return matchQ && matchS;
+    }));
+  }
+
+  function openAdminStatusModal(appId, currentStatus) {
+    document.getElementById('admin-update-app-id').value = appId;
+    document.getElementById('admin-new-status').value    = currentStatus;
+    document.getElementById('admin-remarks').value       = '';
+    openModal('modal-admin-status');
+  }
+
+  async function adminUpdateStatus() {
+    const appId   = document.getElementById('admin-update-app-id').value;
+    const status  = document.getElementById('admin-new-status').value;
+    const remarks = document.getElementById('admin-remarks').value.trim();
+    try {
+      const data = await api.put('/applications/status/' + appId, { status, remarks });
+      if (data.success) {
+        showToast('Status updated to ' + status, 'success');
+        closeModal('modal-admin-status');
+        loadAllApplications();
+      } else showToast(data.message, 'error');
+    } catch(e) { showToast('Failed to update status', 'error'); }
+  }
+
+  // Init
+  loadDashboard();
+</script>
+</body>
+</html>

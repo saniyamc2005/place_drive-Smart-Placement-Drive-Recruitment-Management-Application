@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlacementDrive — Company</title>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"></div>
+      <div>
+        <div class="sidebar-brand-text">PlacementDrive</div>
+        <div class="sidebar-brand-sub">Company Portal</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <button class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg></span> Dashboard</button>
+      <button class="nav-item" id="nav-jobs" onclick="showPage('jobs')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h6M4 9h4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></span> My Job Postings</button>
+      <button class="nav-item" id="nav-applicants" onclick="showPage('applicants')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4" r="2" stroke="currentColor" stroke-width="1.1"/><path d="M1 12c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><path d="M9.5 6.5l1.5 1.5-1.5 1.5M11 8h2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Applicants</button>
+      <span class="nav-section-label">Account</span>
+      <button class="nav-item" id="nav-profile" onclick="showPage('profile')"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="5" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 5V4a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Company Profile</button>
+      <button class="nav-item" onclick="logout()"><span class="nav-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 7h7M9.5 4.5L12 7l-2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 2H3a1 1 0 00-1 1v8a1 1 0 001 1h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Sign Out</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="sidebar-user-avatar">C</div>
+        <div>
+          <div class="user-name" id="sidebar-user-name">Company</div>
+          <div class="user-role" id="sidebar-user-role">Company</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" onclick="showPage('jobs');openModal('modal-post-job')">+ Post New Job</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- ═══════════ DASHBOARD ═══════════ -->
+      <div id="page-dashboard">
+        <div class="page-header">
+          <h2 id="comp-welcome">Company Dashboard</h2>
+          <p>Manage your job postings and review applicants</p>
+        </div>
+        <div class="grid-4" style="margin-bottom:28px">
+          <div class="stat-card"><div class="stat-icon blue"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-jobs">—</div><div class="stat-label">Total Jobs</div></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-open-jobs">—</div><div class="stat-label">Open Jobs</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-total-apps">—</div><div class="stat-label">Total Applicants</div></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#1d4ed8" stroke-width="1.4"/></svg></div><div><div class="stat-value" id="stat-selected">—</div><div class="stat-label">Selected</div></div></div>
+        </div>
+        <div class="grid-2" style="align-items:start">
+          <div class="card">
+            <div class="section-header"><div class="section-title">Recent Job Postings</div><button class="btn btn-ghost btn-sm" onclick="showPage('jobs')">View all</button></div>
+            <div id="dash-jobs-list"><div class="page-loading"><div class="spin"></div></div></div>
+          </div>
+          <div class="card">
+            <div class="section-header"><div class="section-title">Recent Applicants</div><button class="btn btn-ghost btn-sm" onclick="showPage('applicants')">View all</button></div>
+            <div id="dash-apps-list"><div class="page-loading"><div class="spin"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ MY JOB POSTINGS ═══════════ -->
+      <div id="page-jobs" class="hidden">
+        <div class="page-header">
+          <h2>My Job Postings</h2>
+          <p>Manage all jobs posted by your company</p>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box" style="flex:1">
+            <span class="search-icon"></span>
+            <input type="text" class="form-control" id="job-search" placeholder="Search by role, type..." oninput="filterMyJobs()"/>
+          </div>
+          <select class="form-control" style="width:150px" id="job-status-filter" onchange="filterMyJobs()">
+            <option value="">All Status</option>
+            <option>Open</option>
+            <option>Closed</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-post-job')">+ Post Job</button>
+        </div>
+        <div id="company-jobs-grid" class="grid-auto">
+          <div class="page-loading"><div class="spin"></div></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ APPLICANTS ═══════════ -->
+      <div id="page-applicants" class="hidden">
+        <div class="page-header">
+          <h2>Applicants</h2>
+          <p>Review and manage candidates for your jobs</p>
+        </div>
+        <div class="filter-bar">
+          <select class="form-control" style="width:220px" id="app-job-filter" onchange="filterApplicants()">
+            <option value="">All Jobs</option>
+          </select>
+          <select class="form-control" style="width:170px" id="app-status-filter" onchange="filterApplicants()">
+            <option value="">All Statuses</option>
+            <option>Applied</option>
+            <option>Shortlisted</option>
+            <option>Selected</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+        <div class="card card-flat" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student</th>
+                  <th>USN</th>
+                  <th>Branch</th>
+                  <th>CGPA</th>
+                  <th>Job Role</th>
+                  <th>Applied On</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="applicants-tbody">
+                <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted)"><div class="page-loading"><div class="spin"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ COMPANY PROFILE ═══════════ -->
+      <div id="page-profile" class="hidden">
+        <div class="page-header"><h2>Company Profile</h2><p>Your company information registered in the system</p></div>
+        <div class="grid-2" style="align-items:start">
+          <div>
+            <div class="profile-card">
+              <div class="profile-avatar" id="comp-avatar">C</div>
+              <div class="profile-name" id="comp-name">—</div>
+              <div class="profile-meta" id="comp-meta">—</div>
+              <div class="profile-stats">
+                <div><div class="profile-stat-val" id="comp-stat-jobs">—</div><div class="profile-stat-lbl">Jobs Posted</div></div>
+                <div><div class="profile-stat-val" id="comp-stat-apps">—</div><div class="profile-stat-lbl">Applications</div></div>
+                <div><div class="profile-stat-val" id="comp-stat-sel">—</div><div class="profile-stat-lbl">Selected</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" id="comp-detail-card">
+            <div class="page-loading"><div class="spin"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- POST JOB MODAL -->
+<div class="modal-overlay hidden" id="modal-post-job">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="post-job-modal-title">Post New Job</h3>
+      <button class="modal-close" onclick="closeModal('modal-post-job')"></button>
+    </div>
+    <div class="modal-body">
+      <div id="post-job-alert"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Job Role *</label><input type="text" id="j-role" class="form-control" placeholder="Java Developer"/></div>
+        <div class="form-group"><label class="form-label">Package (LPA) *</label><input type="number" id="j-package" class="form-control" placeholder="7.5" step="0.5"/></div>
+        <div class="form-group"><label class="form-label">Min CGPA *</label><input type="number" id="j-cgpa" class="form-control" placeholder="7.0" step="0.1" min="0" max="10"/></div>
+        <div class="form-group"><label class="form-label">Openings</label><input type="number" id="j-openings" class="form-control" placeholder="5"/></div>
+        <div class="form-group"><label class="form-label">Job Type</label>
+          <select id="j-type" class="form-control"><option>Full-time</option><option>Internship</option><option>Contract</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Location</label><input type="text" id="j-location" class="form-control" placeholder="Bengaluru"/></div>
+        <div class="form-group"><label class="form-label">Application Deadline</label><input type="date" id="j-deadline" class="form-control"/></div>
+        <div class="form-group"><label class="form-label">Required Skills</label><input type="text" id="j-skills" class="form-control" placeholder="Java,MySQL,Spring"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Job Description</label><textarea id="j-desc" class="form-control" rows="3" placeholder="Describe the role, responsibilities..."></textarea></div>
+      <button class="btn btn-primary w-full" onclick="submitJob()" id="post-job-btn">Post Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE STATUS MODAL -->
+<div class="modal-overlay hidden" id="modal-update-status">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <h3>Update Application Status</h3>
+      <button class="modal-close" onclick="closeModal('modal-update-status')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">New Status</label>
+        <select id="new-status" class="form-control">
+          <option>Applied</option>
+          <option>Shortlisted</option>
+          <option>Selected</option>
+          <option>Rejected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Remarks (Optional)</label>
+        <textarea id="status-remarks" class="form-control" rows="2" placeholder="Add a note for the candidate..."></textarea>
+      </div>
+      <input type="hidden" id="update-app-id"/>
+      <button class="btn btn-primary w-full" onclick="submitStatusUpdate()">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/utils.js"></script>
+<script>
+  if (!requireAuth(['company'])) { /* redirected */ }
+  renderSidebarUser();
+  const user = Session.get();
+  let myJobs = [], allApplicants = [];
+
+  function showPage(page) {
+    ['dashboard','jobs','applicants','profile'].forEach(p => {
+      document.getElementById('page-'+p).classList.toggle('hidden', p !== page);
+      document.getElementById('nav-'+p)?.classList.toggle('active', p === page);
+    });
+    const titles = { dashboard:'Dashboard', jobs:'My Job Postings', applicants:'Applicants', profile:'Company Profile' };
+    document.getElementById('topbar-title').textContent = titles[page];
+    if (page === 'dashboard')  loadDashboard();
+    if (page === 'jobs')       loadMyJobs();
+    if (page === 'applicants') loadAllApplicants();
+    if (page === 'profile')    loadProfile();
+  }
+
+  // ── DASHBOARD ────────────────────────────────────────────────────────────────
+  async function loadDashboard() {
+    document.getElementById('comp-welcome').textContent = `Welcome, ${user.name}! `;
+    try {
+      const jobsRes = await api.get('/jobs/company/' + user.companyId);
+      const jobs = jobsRes.jobs || [];
+      document.getElementById('stat-jobs').textContent = jobs.length;
+      document.getElementById('stat-open-jobs').textContent = jobs.filter(j => j.status === 'Open').length;
+
+      let totalApps = 0, totalSelected = 0;
+      const appPromises = jobs.map(j => api.get('/applications/job/' + j.id));
+      const allJobApps = await Promise.all(appPromises);
+      allJobApps.forEach(r => {
+        const apps = r.applications || [];
+        totalApps += apps.length;
+        totalSelected += apps.filter(a => a.status === 'Selected').length;
+      });
+      document.getElementById('stat-total-apps').textContent = totalApps;
+      document.getElementById('stat-selected').textContent = totalSelected;
+
+      // Recent jobs
+      const dashJobs = document.getElementById('dash-jobs-list');
+      const recentJobs = jobs.slice(-4).reverse();
+      dashJobs.innerHTML = recentJobs.length ? recentJobs.map(j => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border-light)">
+          <div><div style="font-weight:600;font-size:0.875rem">${j.role}</div><div style="font-size:0.78rem;color:var(--text-muted)">${packageLabel(j.packageAmount)} · ${j.jobType || ''}</div></div>
+          ${badgeHtml(j.status)}
+        </div>`).join('') : emptyState('No jobs posted yet');
+
+      // Recent applicants (from first job with apps)
+      const dashApps = document.getElementById('dash-apps-list');
+      const recentApps = allJobApps.flatMap(r => r.applications || []).slice(-4).reverse();
+      dashApps.innerHTML = recentApps.length ? recentApps.map(a => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border-light)">
+          <div>
+            <div style="font-weight:600;font-size:0.875rem">${a.student?.user?.name || '—'}</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">${a.job?.role || '—'} · CGPA ${a.student?.cgpa || '—'}</div>
+          </div>
+          ${badgeHtml(a.status)}
+        </div>`).join('') : emptyState('No applicants yet');
+    } catch(e) { showToast('Failed to load dashboard', 'error'); }
+  }
+
+  // ── MY JOBS ───────────────────────────────────────────────────────────────────
+  async function loadMyJobs() {
+    try {
+      const res = await api.get('/jobs/company/' + user.companyId);
+      myJobs = res.jobs || [];
+      renderMyJobs(myJobs);
+    } catch(e) { showToast('Failed to load jobs', 'error'); }
+  }
+
+  function renderMyJobs(jobs) {
+    const grid = document.getElementById('company-jobs-grid');
+    if (!jobs.length) { grid.innerHTML = emptyState('No jobs posted yet. Click + Post Job to start.'); return; }
+    grid.innerHTML = jobs.map(j => `
+      <div class="job-card">
+        <div class="job-card-header">
+          <div><div class="job-role">${j.role}</div><div class="job-company">${j.jobType || '—'}</div></div>
+          ${badgeHtml(j.status)}
+        </div>
+        <div class="job-meta">
+          <span class="job-meta-item"> ${packageLabel(j.packageAmount)}</span>
+          <span class="job-meta-item"> Min ${j.minCgpa} CGPA</span>
+          <span class="job-meta-item"> ${j.openings || 0} openings</span>
+          <span class="job-meta-item"> ${j.location || 'N/A'}</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px"> Deadline: ${formatDate(j.deadline)}</div>
+        <div class="job-actions">
+          <button class="btn btn-outline btn-sm" onclick="viewApplicantsForJob(${j.id})"> Applicants</button>
+          ${j.status === 'Open' ? `<button class="btn btn-ghost btn-sm" onclick="closeJob(${j.id})">Close</button>` : ''}
+          <button class="btn btn-ghost btn-sm" style="color:var(--danger)" onclick="deleteJob(${j.id})">Delete</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function filterMyJobs() {
+    const q      = document.getElementById('job-search').value.toLowerCase();
+    const status = document.getElementById('job-status-filter').value;
+    renderMyJobs(myJobs.filter(j => {
+      const matchQ = !q || j.role?.toLowerCase().includes(q) || j.jobType?.toLowerCase().includes(q);
+      const matchS = !status || j.status === status;
+      return matchQ && matchS;
+    }));
+  }
+
+  async function closeJob(jobId) {
+    if (!confirm('Close this job? Students will no longer be able to apply.')) return;
+    try {
+      const d = await api.put('/jobs/close/' + jobId);
+      if (d.success) { showToast('Job closed', 'info'); loadMyJobs(); }
+      else showToast(d.message, 'error');
+    } catch(e) { showToast('Failed to close job', 'error'); }
+  }
+
+  async function deleteJob(jobId) {
+    if (!confirm('Delete this job posting? This cannot be undone.')) return;
+    try {
+      const d = await api.delete('/jobs/delete/' + jobId);
+      if (d.success) { showToast('Job deleted', 'info'); loadMyJobs(); }
+      else showToast(d.message, 'error');
+    } catch(e) { showToast('Failed to delete job', 'error'); }
+  }
+
+  // ── POST JOB ──────────────────────────────────────────────────────────────────
+  async function submitJob() {
+    const role     = document.getElementById('j-role').value.trim();
+    const pkg      = parseFloat(document.getElementById('j-package').value) || 0;
+    const cgpa     = parseFloat(document.getElementById('j-cgpa').value) || 0;
+    const openings = parseInt(document.getElementById('j-openings').value) || 0;
+    const jobType  = document.getElementById('j-type').value;
+    const location = document.getElementById('j-location').value.trim();
+    const deadline = document.getElementById('j-deadline').value;
+    const skills   = document.getElementById('j-skills').value.trim();
+    const desc     = document.getElementById('j-desc').value.trim();
+
+    if (!role || !pkg || !cgpa) {
+      document.getElementById('post-job-alert').innerHTML = '<div class="alert alert-error">Please fill required fields (Role, Package, Min CGPA)</div>';
+      return;
+    }
+
+    const btn = document.getElementById('post-job-btn');
+    btn.innerHTML = '<span class="spinner"></span> Posting...'; btn.disabled = true;
+
+    try {
+      const data = await api.post('/jobs/post/' + user.companyId, {
+        role, packageAmount: pkg, minCgpa: cgpa, openings, jobType, location, deadline, requiredSkills: skills, description: desc
+      });
+      if (data.success) {
+        showToast('Job posted successfully!', 'success');
+        closeModal('modal-post-job');
+        ['j-role','j-package','j-cgpa','j-openings','j-location','j-deadline','j-skills','j-desc'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('post-job-alert').innerHTML = '';
+        loadMyJobs();
+      } else {
+        document.getElementById('post-job-alert').innerHTML = `<div class="alert alert-error">${data.message}</div>`;
+      }
+    } catch(e) { document.getElementById('post-job-alert').innerHTML = '<div class="alert alert-error">Server error</div>'; }
+    finally { btn.innerHTML = 'Post Job'; btn.disabled = false; }
+  }
+
+  // ── APPLICANTS ────────────────────────────────────────────────────────────────
+  async function loadAllApplicants() {
+    try {
+      const jobsRes = await api.get('/jobs/company/' + user.companyId);
+      const jobs = jobsRes.jobs || [];
+
+      // Populate job filter dropdown
+      const sel = document.getElementById('app-job-filter');
+      sel.innerHTML = '<option value="">All Jobs</option>' + jobs.map(j => `<option value="${j.id}">${j.role}</option>`).join('');
+
+      // Fetch all applicants for all jobs
+      const appResults = await Promise.all(jobs.map(j => api.get('/applications/job/' + j.id)));
+      allApplicants = appResults.flatMap(r => r.applications || []);
+      renderApplicants(allApplicants);
+    } catch(e) { showToast('Failed to load applicants', 'error'); }
+  }
+
+  function viewApplicantsForJob(jobId) {
+    showPage('applicants');
+    setTimeout(() => {
+      document.getElementById('app-job-filter').value = jobId;
+      filterApplicants();
+    }, 300);
+  }
+
+  function renderApplicants(apps) {
+    const tbody = document.getElementById('applicants-tbody');
+    if (!apps.length) { tbody.innerHTML = `<tr><td colspan="9">${emptyState('No applicants found')}</td></tr>`; return; }
+    tbody.innerHTML = apps.map((a, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${a.student?.user?.name || '—'}</strong><br><span style="font-size:0.75rem;color:var(--text-muted)">${a.student?.user?.email || ''}</span></td>
+        <td>${a.student?.usn || '—'}</td>
+        <td>${a.student?.branch || '—'}</td>
+        <td><strong>${a.student?.cgpa || '—'}</strong></td>
+        <td>${a.job?.role || '—'}</td>
+        <td>${formatDate(a.appliedDate)}</td>
+        <td>${badgeHtml(a.status)}</td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="openStatusModal(${a.id}, '${a.status}')">Update</button>
+          ${a.student?.resumeLink ? `<a href="${a.student.resumeLink}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:4px">Resume</a>` : ''}
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterApplicants() {
+    const jobId  = document.getElementById('app-job-filter').value;
+    const status = document.getElementById('app-status-filter').value;
+    renderApplicants(allApplicants.filter(a => {
+      const matchJob    = !jobId  || a.job?.id == jobId;
+      const matchStatus = !status || a.status === status;
+      return matchJob && matchStatus;
+    }));
+  }
+
+  function openStatusModal(appId, currentStatus) {
+    document.getElementById('update-app-id').value = appId;
+    document.getElementById('new-status').value = currentStatus;
+    document.getElementById('status-remarks').value = '';
+    openModal('modal-update-status');
+  }
+
+  async function submitStatusUpdate() {
+    const appId   = document.getElementById('update-app-id').value;
+    const status  = document.getElementById('new-status').value;
+    const remarks = document.getElementById('status-remarks').value.trim();
+    try {
+      const data = await api.put('/applications/status/' + appId, { status, remarks });
+      if (data.success) {
+        showToast('Status updated to ' + status, 'success');
+        closeModal('modal-update-status');
+        loadAllApplicants();
+      } else showToast(data.message, 'error');
+    } catch(e) { showToast('Failed to update status', 'error'); }
+  }
+
+  // ── PROFILE ───────────────────────────────────────────────────────────────────
+  async function loadProfile() {
+    try {
+      const [compRes, jobsRes] = await Promise.all([
+        api.get('/companies/' + user.companyId),
+        api.get('/jobs/company/' + user.companyId)
+      ]);
+      const c = compRes.company;
+      const jobs = jobsRes.jobs || [];
+      let totalApps = 0, totalSel = 0;
+      const appResults = await Promise.all(jobs.map(j => api.get('/applications/job/' + j.id)));
+      appResults.forEach(r => {
+        const apps = r.applications || [];
+        totalApps += apps.length;
+        totalSel  += apps.filter(a => a.status === 'Selected').length;
+      });
+
+      document.getElementById('comp-avatar').textContent = avatarLetter(c.companyName);
+      document.getElementById('comp-name').textContent   = c.companyName;
+      document.getElementById('comp-meta').textContent   = `${c.industry || ''} ${c.industry && c.website ? '·' : ''} ${c.website || ''}`;
+      document.getElementById('comp-stat-jobs').textContent = jobs.length;
+      document.getElementById('comp-stat-apps').textContent = totalApps;
+      document.getElementById('comp-stat-sel').textContent  = totalSel;
+
+      document.getElementById('comp-detail-card').innerHTML = `
+        <div class="section-title mb-2">Company Details</div>
+        <div class="divider"></div>
+        ${row('Company Name', c.companyName)}
+        ${row('Industry', c.industry || '—')}
+        ${row('Website', c.website ? `<a href="${c.website}" target="_blank" style="color:var(--primary)">${c.website}</a>` : '—')}
+        ${row('Contact Email', c.contactEmail || '—')}
+        ${row('Description', c.description || '—')}
+        ${row('Registered Email', user.email)}
+      `;
+    } catch(e) { showToast('Failed to load profile', 'error'); }
+  }
+
+  function row(label, value) {
+    return `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-light);font-size:0.875rem">
+      <span style="color:var(--text-muted);font-weight:500">${label}</span>
+      <span style="font-weight:500">${value}</span>
+    </div>`;
+  }
+
+  // Init
+  loadDashboard();
+</script>
+</body>
+</html>
